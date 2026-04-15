@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Car from "./Car.js"
+import User from "./User.js"
+import Sale from "./Sale.js"
 
 dotenv.config();
 
@@ -130,6 +132,226 @@ app.get("/cars/available/count", async (req, res) => {
         res.json({ error: error.message });
     }
 })
+
+
+app.post("/users", async (req, res) => {
+    try {
+        const newUser = await User.create(req.body);
+        res.json(newUser);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.get("/users/:id", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.json(user);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.put("/users/:id", async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body
+            );
+        res.json(updatedUser);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.delete("/users/:id", async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        res.json(deletedUser);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/users/email/:email", async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        res.json(user);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/users/search/count", async (req, res) => {
+    try {
+        const usersCount = await User.countDocuments();
+        res.json(usersCount);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.patch("/users/:id/name", async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new: true}
+        );
+        res.json(updatedUser);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/users/exists/:email", async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        res.json(user);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/users/search/:name", async (req, res) => {
+    try {
+        const user = await User.findOne({ name: req.params.name });
+        res.json(user);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.delete("/users", async (req, res) => {
+    try {
+        const deletedUsers = await User.deleteMany({});
+        res.json(deletedUsers);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+
+
+app.post("/sales", async (req, res) => {
+    try {
+        const newSale = await Sale.create(req.body);
+        res.json(newSale);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/sales", async (req, res) => {
+    try {
+        const sales = await Sale.find();
+        res.json(sales);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/sales/:id", async (req, res) => {
+    try {
+        const sale = await Sale.findById(req.params.id);
+        res.json(sale);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.put("/sales/:id", async (req, res) => {
+    try {
+        const updatedSale = await Sale.findByIdAndUpdate(
+            req.params.id,
+            req.body
+        )
+
+        res.json(updatedSale);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.delete("/sales/:id", async (req, res) => {
+    try {
+        const deletedSale = await Sale.findByIdAndDelete(req.params.id);
+        res.json(deletedSale);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/sales/user/:userId", async (req, res) => {
+    try {
+        const userSales = await Sale.find({ userId: req.params.userId });
+        res.json(userSales);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/sales/car/:carId", async (req, res) => {
+    try {
+        const carSales = await Sale.find({ carId: req.params.carId });
+        res.json(carSales);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.patch("/sales/:id/status", async (req, res) => {
+    try {
+        const updatedSale = await Sale.findByIdAndUpdate(
+            req.params.id,
+            req.body
+        )
+        res.json(updatedSale)
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+app.get("/sales/value/:min/:max", async (req, res) => {
+    try {
+        const sales = await Sale.find(
+            { value: {$gte: req.params.min, $lte: req.params.max} }
+        )
+
+        res.json(sales);
+    } catch (error) {
+        res.json({ error: error.message})
+    }
+})
+
+app.get("/sales/date/:date", async (req, res) => {
+    try {
+        const sales = await Sale.find({ saleDate: req.params.date });
+        res.json(sales)
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
+app.get("/sales/search/count", async (req, res) => {
+    try {
+        const salesCount = await Sale.countDocuments();
+        res.json(salesCount);
+    } catch (error) {
+        res.json({ error: error.message })
+    }
+})
+
+
 
 
 app.listen(PORT, () => {
