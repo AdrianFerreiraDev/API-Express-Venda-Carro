@@ -245,6 +245,8 @@ app.delete("/users", async (req, res) => {
 app.post("/sales", async (req, res) => {
     try {
         const newSale = await Sale.create(req.body);
+        let updateCarAvailability = await Car.find({ id: newSale.carId });
+        updateCarAvailability.available = false;
         res.json(newSale);
     } catch (error) {
         res.json({ error: error.message });

@@ -9,7 +9,7 @@ const SaleSchema = new mongoose.Schema(
        saleDate: String,
        status: String
     },
-    {collection: "users"}
+    {collection: "sales"}
 );
 
 export default mongoose.model("Sale", SaleSchema);
