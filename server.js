@@ -215,7 +215,10 @@ app.patch("/users/:id/name", async (req, res) => {
 
 app.get("/users/exists/:email", async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.params.email });
+        let user = await User.exists({ email: req.params.email });
+        if(user) {
+            user = true;
+        }
         res.json(user);
     } catch (error) {
         res.json({ error: error.message });
