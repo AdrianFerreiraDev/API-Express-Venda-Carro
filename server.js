@@ -95,23 +95,23 @@ app.patch("/cars/:id/availability", async (req, res) => {
         const updateCar = await Car.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new: true}
+            { new: true }
         )
         res.json(updateCar)
     } catch (error) {
-        res.json({error: error.message});
+        res.json({ error: error.message });
     }
 })
 
 app.get("/cars/price/:min/:max", async (req, res) => {
     try {
         const cars = await Car.find(
-            { price: {$gte: req.params.min, $lte: req.params.max} }
+            { price: { $gte: req.params.min, $lte: req.params.max } }
         )
 
         res.json(cars);
     } catch (error) {
-        res.json({ error: error.message})
+        res.json({ error: error.message })
     }
 })
 
@@ -166,7 +166,7 @@ app.put("/users/:id", async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
             req.body
-            );
+        );
         res.json(updatedUser);
     } catch (error) {
         res.json({ error: error.message })
@@ -205,7 +205,7 @@ app.patch("/users/:id/name", async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new: true}
+            { new: true }
         );
         res.json(updatedUser);
     } catch (error) {
@@ -245,8 +245,10 @@ app.delete("/users", async (req, res) => {
 app.post("/sales", async (req, res) => {
     try {
         const newSale = await Sale.create(req.body);
-        let updateCarAvailability = await Car.find({ id: newSale.carId });
-        updateCarAvailability.available = false;
+        let updateCarAvailability = await Car.findByIdAndUpdate(
+            newSale.carId,
+            { available: false }
+        );
         res.json(newSale);
     } catch (error) {
         res.json({ error: error.message });
@@ -326,12 +328,12 @@ app.patch("/sales/:id/status", async (req, res) => {
 app.get("/sales/value/:min/:max", async (req, res) => {
     try {
         const sales = await Sale.find(
-            { value: {$gte: req.params.min, $lte: req.params.max} }
+            { value: { $gte: req.params.min, $lte: req.params.max } }
         )
 
         res.json(sales);
     } catch (error) {
-        res.json({ error: error.message})
+        res.json({ error: error.message })
     }
 })
 
