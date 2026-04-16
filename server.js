@@ -94,7 +94,7 @@ app.patch("/cars/:id/availability", async (req, res) => {
     try {
         const updateCar = await Car.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            { available: req.body.available },
             { new: true }
         )
         res.json(updateCar)
@@ -204,7 +204,7 @@ app.patch("/users/:id/name", async (req, res) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            { name: req.body.name },
             { new: true }
         );
         res.json(updatedUser);
@@ -317,7 +317,7 @@ app.patch("/sales/:id/status", async (req, res) => {
     try {
         const updatedSale = await Sale.findByIdAndUpdate(
             req.params.id,
-            req.body
+            { status: req.body.status }
         )
         res.json(updatedSale)
     } catch (error) {
